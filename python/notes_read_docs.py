@@ -1,5 +1,63 @@
-# 1. The default values are evaluated at the point of function definition in
-#  the `defining' scope.
+# 1
+# In interactive mode, the last printed expression is assigned to the
+# variable ‘_’.  This means that when you are using Python as a desk
+# calculator, it is somewhat easier to continue calculations, for example:
+
+tax = 12.5 / 100
+price = 100.50
+price * tax
+
+price + _
+
+round(_, 2)
+
+# 2
+# One way to remember how slices work is to think of the indices as
+# pointing `between' characters, with the left edge of the first character
+# numbered 0.  Then the right edge of the last character of a string of
+# `n' characters has index `n', for example:
+
+#       +---+---+---+---+---+---+
+#       | P | y | t | h | o | n |
+#       +---+---+---+---+---+---+
+#       0   1   2   3   4   5   6
+#      -6  -5  -4  -3  -2  -1
+
+# 3
+# In Python, like in C, any non-zero integer value is true; zero is false.
+# The condition may also be a string or list value, in fact any sequence;
+# anything with a non-zero length is true, empty sequences are false.
+
+# 4
+# If you need to modify the sequence you are iterating over while inside
+# the loop (for example to duplicate selected items), it is recommended
+# that you first make a copy.  Iterating over a sequence does not
+# implicitly make a copy.  The slice notation makes this especially
+# convenient:
+
+words = ['cat', 'window', 'defenestrate']
+for w in words[:]:  # Loop over a slice copy of the entire list.
+    if len(w) > 6:
+        words.insert(0, w)
+
+words
+
+
+# 5
+# *tuple and **dict style function arguments
+def cheeseshop(kind, *arguments, **keywords):
+    print("-- Do you have any", kind, "?")
+    print("-- I'm sorry, we're all out of", kind)
+    for arg in arguments:
+        print(arg)
+    print("-" * 40)
+    for kw in keywords:
+        print(kw, ":", keywords[kw])
+
+
+# 6
+# The default values are evaluated at the point of function definition in
+# the `defining' scope.
 
 i = 5
 
@@ -22,18 +80,8 @@ print(f(2))  # => [1, 2]
 print(f(3))  # => [1, 2, 3]
 
 
-# 2. *tuple and **dict style function arguments
-def cheeseshop(kind, *arguments, **keywords):
-    print("-- Do you have any", kind, "?")
-    print("-- I'm sorry, we're all out of", kind)
-    for arg in arguments:
-        print(arg)
-    print("-" * 40)
-    for kw in keywords:
-        print(kw, ":", keywords[kw])
-
-
-# 3. Upacking Argument lists, using * for list and ** for dict
+# 7
+# Upacking Argument lists, using * for list and ** for dict
 args = [3, 6]
 list(range(*args))  # this is <=> list(range(3, 6))
 
@@ -48,12 +96,14 @@ d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
 parrot(**d)
 
 
-# 4. Methods like ‘insert’, ‘remove’ or ‘sort’ that only modify the list have
+# 8
+# Methods like ‘insert’, ‘remove’ or ‘sort’ that only modify the list have
 # no return value – they return the default ‘None’. This is a design principle
 # for all mutable data structures in Python.
 
 
-# 5. List Comprehension
+# 9
+# List Comprehension
 [(x, y) for x in [1, 2, 3] for y in [3, 1, 4] if x != y]
 
 # is equivalent to
@@ -64,14 +114,16 @@ for x in [1, 2, 3]:
             combs.append((x, y))
 
 
-# 6. Loop over 2 list at the same time
+# 10
+# Loop over 2 list at the same time
 questions = ['name', 'quest', 'favorite color']
 answers = ['lancelot', 'the holy grail', 'blue']
 for q, a in zip(questions, answers):
     print('What is your {0}?  It is {1}.'.format(q, a))
 
 
-# 7. Understand Module
+# 11
+# Understand Module
 # A module is a file containing Python definitions and statements.  The
 # file name is the module name with the suffix ‘.py’ appended.  Within a
 # module, the module’s name (as a string) is available as the value of the
@@ -102,7 +154,8 @@ for q, a in zip(questions, answers):
 # module is executed as the “main” file:
 
 
-# 8. Understand Package
+# 12
+# Understand Package
 #      sound/                          Top-level package
 #            __init__.py               Initialize the sound package
 #            formats/                  Subpackage for file format conversions
@@ -167,7 +220,8 @@ for q, a in zip(questions, answers):
 # three named submodules of the ‘sound’ package.
 
 
-# 10. Scope and Namespaces
+# 13
+# Scope and Namespaces
 def scope_test():
     def do_local():
         spam = "local spam"
@@ -191,3 +245,36 @@ def scope_test():
 
 scope_test()
 print("In global scope:", spam)
+
+
+# 14
+# Class
+# When a class definition is entered, a new namespace is created, and used
+# as the local scope
+
+# When a class definition is left normally (via the end), a `class object'
+# is created.  This is basically a wrapper around the contents of the
+# namespace created by the class definition; The original local scope (the one
+# in effect just before the class definition was entered) is reinstated, and
+# the class object is bound here to the class name given in the class
+# definition header
+
+# Class objects support two kinds of operations: attribute references and
+# instantiation. (instantiation via __init__ function)
+
+class MyClass:
+    """A simple example class"""
+    i = 12345
+
+    def f(self):
+        return 'hello world'
+
+# the special thing about methods is that the instance object is passed as
+# the first argument of the function. In our example, the call ‘x.f()’ is
+# exactly equivalent to ‘MyClass.f(x)’
+
+# Derived classes may override methods of their base classes.  Because
+# methods have no special privileges when calling other methods of the
+# same object, a method of a base class that calls another method defined
+# in the same base class may end up calling a method of a derived class
+# that overrides it.

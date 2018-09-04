@@ -1,0 +1,9 @@
+1. First of all, C# cannot use static libraries
+   https://stackoverflow.com/a/729579/4499942
+
+2. Use [DllImport("mylib")], this will look for libmylib.so on Linux
+   Read https://www.mono-project.com/docs/advanced/pinvoke/ for more info
+
+3. Build the assembly, add the so file to search path.(see link above)
+
+4. Run

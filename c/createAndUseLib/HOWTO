@@ -1,0 +1,34 @@
+1. Create a header file
+2. Create all the .c files
+3. Create object files
+   $ gcc -c src/main.c -o bin/main.o
+
+   $ gcc -c src/mylibFile1.c -o bin/static/mylibFile1.o
+   $ gcc -c src/mylibFile2.c -o bin/static/mylibFile2.o
+
+   (use -fPIC if building a shared library)
+   $ gcc -fPIC -c src/mylibFile1.c -o bin/shared/mylibFile1.o
+   $ gcc -fPIC -c src/mylibFile2.c -o bin/shared/mylibFile2.o
+
+4. Create a library .a file
+   r means to insert with replacement,
+   c means to create a new archive,
+   s means to write an index.
+
+   $ ar rcs bin/static/libmylib.a bin/static/*.o
+
+   (if building a so file)
+   $ gcc -o bin/shared/libmylib.so -shared bin/shared/*.o
+
+5. Create an executable file, link all together
+   -L path to look for libraries
+   -l library to link, without lib prefix and .a suffix
+   NOTE: libraries need to be specified after the files needing them
+         otherwise a "undefined reference to xxx" will throw
+
+   $ gcc -o bin/myProg-static-linked bin/main.o -Lbin/static -lmylib
+   $ ./bin/myProg-static-linked 12 33
+
+   To link dynamically with shared library
+   $ gcc -o bin/myProg-dynam-linked bin/main.o -Lbin/shared -lmylib
+   $ LD_LIBRARY_PATH=$(pwd)/bin/shared:$LD_LIBRARY_PATH ./bin/myProg-static-linked 22 129

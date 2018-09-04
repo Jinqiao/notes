@@ -9,6 +9,7 @@ namespace UseNativeLib
         {
             if (args.Length < 2) {
                 Console.WriteLine("need at least 2 arguments");
+                return;
             }
 
             double a = double.Parse(args[0]);

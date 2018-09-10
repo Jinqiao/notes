@@ -1,19 +1,20 @@
-/* Extend simply add one stylesheet to another and
- * that creates a logical connection between elements */
-.dialog-button, .confirm, .cancel {
-  box-sizing: border-box;
-  color: #ffffff;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
-  padding: 12px 40px;
-  cursor: pointer; }
+/* Using @extend lets you share a set of CSS properties from one selector 
+   to another. It helps keep your Sass very DRY. A placeholder class (start 
+   with %) is a special type of class that only prints when it is extended, 
+   and can help keep your compiled CSS neat and clean. */
+.message, .success, .error, .warning {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333; }
 
-.confirm {
-  background-color: #87bae1;
-  float: left; }
+.success {
+  border-color: green; }
 
-.cancel {
-  background-color: #e4749e;
-  float: right; }
+.error {
+  border-color: red; }
 
-/* For this example, Sass will combine the selectors instead 
+.warning {
+  border-color: yellow; }
+
+/* Note: Sass will combine the selectors instead 
    of repeating the same declarations over and over */

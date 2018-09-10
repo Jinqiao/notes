@@ -1,0 +1,13 @@
+/* sass has many built in functions, below use darken() as 
+ * an example */
+
+$awesome-blue: #2196F3;
+
+a {
+    padding: 10px 15px;
+    background-color: $awesome-blue;
+}
+
+a:hover {
+    background-color: darken($awesome-blue,10%);
+}

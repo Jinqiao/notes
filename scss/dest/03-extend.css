@@ -1,0 +1,19 @@
+/* Extend simply add one stylesheet to another and
+ * that creates a logical connection between elements */
+.dialog-button, .confirm, .cancel {
+  box-sizing: border-box;
+  color: #ffffff;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+  padding: 12px 40px;
+  cursor: pointer; }
+
+.confirm {
+  background-color: #87bae1;
+  float: left; }
+
+.cancel {
+  background-color: #e4749e;
+  float: right; }
+
+/* For this example, Sass will combine the selectors instead 
+   of repeating the same declarations over and over */

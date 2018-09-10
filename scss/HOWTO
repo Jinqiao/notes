@@ -1,0 +1,9 @@
+1. use sass command to compile a .scss file to .css
+   $ sass input.scss output.css
+
+2. to use gulp to automate this
+   $ npm install gulp-cli -g
+   $ npm install gulp -D
+   $ npm install gulp-ruby-sass -D
+
+   then create a gulpfile.js and run "gulp TASK_NAME"

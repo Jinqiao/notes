@@ -1,0 +1,15 @@
+/* A partial is simply a Sass file named with a leading underscore. 
+   You might name it something like _partial.scss. The underscore 
+   lets Sass know that the file is only a partial file and that it 
+   should not be generated into a CSS file. Sass partials are used 
+   with the @import directive. */
+
+// _reset.scss
+
+html,
+body,
+ul,
+ol {
+    margin:  0;
+    padding: 0;
+}

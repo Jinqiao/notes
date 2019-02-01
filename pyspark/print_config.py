@@ -1,6 +1,4 @@
-
 # https://stackoverflow.com/a/46215539/4499942
-
 
 # Print spark conf
 # to get a conf object we can also use: sc.getConf()
@@ -17,9 +15,8 @@ while iterator.hasNext():
     prop = iterator.next()
     hadoopConf[prop.getKey()] = prop.getValue()
 
-for item in sorted(hadoopConf.items()): 
-    print(item)
-
+for (k,v) in sorted(hadoopConf.items()):
+    print(k + "->" + v)
 
 # Print env
 # or just use !env in ipython

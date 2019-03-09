@@ -92,7 +92,7 @@ def parrot(voltage, state='a stiff', action='voom'):
     print("E's", state, "!")
 
 
-d = {"voltage": "four million", "state": "bleedin' demised", "action": "VOOM"}
+d = {"voltage": "four million", "state": "bleedin'demised", "action": "VOOM"}
 parrot(**d)
 
 

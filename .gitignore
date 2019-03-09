@@ -112,3 +112,6 @@ typings/
 
 # sass-cache
 .sass-cache/
+
+# pyc
+.pyc

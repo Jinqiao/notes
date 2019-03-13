@@ -99,3 +99,100 @@
 
 
 ;; 3.7 The ‘if’ Special Form
+(if TRUE-OR-FALSE-TEST
+    ACTION-TO-CARRY-OUT-IF-TEST-IS-TRUE)
+
+(if (> 5 4)                             ; if-part
+    (message "5 is greater than 4!"))   ; then-part
+
+(defun type-of-animal (characteristic)
+  "Print message in echo area depending on CHARACTERISTIC.
+     If the CHARACTERISTIC is the string \"fierce\",
+     then warn of a tiger."
+  (if (equal characteristic "fierce")
+      (message "It is a tiger!")))
+
+(type-of-animal "fierce")
+(type-of-animal "striped")
+
+
+;; 3.8 If–then–else Expressions
+(if TRUE-OR-FALSE-TEST
+    ACTION-TO-CARRY-OUT-IF-THE-TEST-RETURNS-TRUE
+  ACTION-TO-CARRY-OUT-IF-THE-TEST-RETURNS-FALSE)
+
+(defun type-of-animal (characteristic)  ; Second version.
+  "Print message in echo area depending on CHARACTERISTIC.
+     If the CHARACTERISTIC is the string \"fierce\",
+     then warn of a tiger; else say it is not fierce."
+  (if (equal characteristic "fierce")
+      (message "It is a tiger!")
+    (message "It is not fierce!")))
+
+(type-of-animal "fierce")
+(type-of-animal "striped")
+
+
+;; 3.9 Truth and Falsehood in Emacs Lisp
+;; In Emacs Lisp, the symbol ‘nil’ has two meanings.  First, it means
+;; the empty list.  Second, it means false and is the value returned when a
+;; true-or-false-test tests false.
+
+;; As far as the Lisp interpreter is concerned, ‘()’ and ‘nil’ are the same.
+;; Any value that is not ‘nil’—is not the empty list—is considered true.
+
+(if 4
+    'true
+  'false)
+
+(if nil
+    'true
+  'false)
+
+;; Incidentally, if some other useful value is not available for a test
+;; that returns true, then the Lisp interpreter will return the symbol ‘t’
+;; for true.  For example, the expression ‘(> 5 4)’ returns ‘t’ when
+;; evaluated, as you can see by evaluating it in the usual way:
+(> 5 4)
+
+;; On the other hand, this function returns ‘nil’ if the test is false.
+(> 4 5)
+
+
+;; 3.10 ‘save-excursion’
+;; It saves the location of point, executes the body of the function, and
+;; then restores point to its previous position if its location was changed
+(save-excursion
+  FIRST-EXPRESSION-IN-BODY
+  SECOND-EXPRESSION-IN-BODY
+  THIRD-EXPRESSION-IN-BODY
+  ...
+  LAST-EXPRESSION-IN-BODY)
+
+;; ‘C-x C-x’ (‘exchange-point-and-mark’) cause the cursor to jump to the
+;; mark and set the mark to be the previous position of point
+
+;; C-<SPC> C-<SPC>
+;; Set the mark, pushing it onto the mark ring, without activating it.
+;; C-u C-<SPC>
+;; Move point to where the mark was, and restore the mark from the ring
+;; of former marks.
+
+
+;; 3.12 Exercises
+;; • Write a non-interactive function that doubles the value of its
+;; argument, a number.  Make that function interactive.
+
+(defun double (n)
+  "n * 2"
+  (interactive "P")
+  (* n 2)
+  (message "ok")
+  )
+
+(double 12)
+
+
+;; • Write a function that tests whether the current value of
+;; ‘fill-column’ is greater than the argument passed to the function,
+;; and if so, prints an appropriate message.

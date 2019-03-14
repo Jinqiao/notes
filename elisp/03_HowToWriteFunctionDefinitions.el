@@ -186,13 +186,19 @@
 (defun double (n)
   "n * 2"
   (interactive "P")
-  (* n 2)
-  (message "ok")
+  (message (number-to-string (* n 2)))
   )
-
-(double 12)
-
 
 ;; • Write a function that tests whether the current value of
 ;; ‘fill-column’ is greater than the argument passed to the function,
 ;; and if so, prints an appropriate message.
+(defun exercise-3-12-2 (number)
+  "test fill-column is greater than input or not"
+  (interactive "P")
+  (if (> number fill-column)
+      (message "%d is greater than fill-column" number)
+    (message "%d is <= fill-column" number))
+  )
+
+(exercise-3-12-2 69)
+(exercise-3-12-2 71)

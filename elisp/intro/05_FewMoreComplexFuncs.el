@@ -60,8 +60,19 @@ Puts mark after the inserted text.
 ;; However, if you do not pass an argument to the function, use 56 as a
 ;; default value.
 
-(defun is-larger-than-fill-column (&optional args)
+(defun is-larger-than-fill-column (&optional arg)
   "exercise 5.5"
   (interactive "P")
-  (let valueEqualArgsOr56)
+  (let ((value (if arg
+                   (prefix-numeric-value arg)
+                 56)))
+    (if (> value fill-column)
+        (message "%d is greater than fill-column" value)
+      (if (= value fill-column)
+          (message "%d is equal fill-column" value)
+        (message "%d is less than fill-column" value))))
   )
+
+(is-larger-than-fill-column 56)
+(is-larger-than-fill-column 70)
+(is-larger-than-fill-column 77)

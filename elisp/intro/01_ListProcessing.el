@@ -1,17 +1,17 @@
 ;; 1.1 Lisp Lists
 ;; In brief, a list is between parentheses, a string is between
-;; quotation marks, a symbol looks like a word, and a number looks like a
-;; number.
+;; quotation marks, a symbol looks like a word, and a number looks
+;; like a number.
 
 ;; 1.2 Run a Program
 ;; A list in Lisp—any list—is a program ready to run.
 ;; If you run it the computer will do one of three things:
-;; do nothing except return to you the list itself;
-;; send you an error message;
-;; or, treat the first symbol in the list as a command to do something.
+;; 1) do nothing except return to you the list itself;
+;; 2) send you an error message;
+;; 3) treat the first symbol in the list as a command to do something.
 
 ;; Single apostrophe before a list tells Lisp to do nothing with the list
-;; other than take it as it is written
+;; other than take it as it is written (same for variable/symbol)
 
 ;; To evaluate a list -> place your cursor immediately after the right
 ;; hand parenthesis of a list then type ‘C-x C-e’
@@ -23,7 +23,7 @@
 
 ;; 1.5 The Lisp Interpreter
 
-;; Comlication
+;; Complication
 ;; 1) variable
 ;; 2) special form
 ;; 3) macro

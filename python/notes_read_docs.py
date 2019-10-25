@@ -60,11 +60,8 @@ def cheeseshop(kind, *arguments, **keywords):
 # the `defining' scope.
 
 i = 5
-
-
 def f(arg=i):
     print(arg)
-
 
 i = 6
 f()  # print '5'
@@ -78,7 +75,6 @@ def f(a, L=[]):
 print(f(1))  # => [1]
 print(f(2))  # => [1, 2]
 print(f(3))  # => [1, 2, 3]
-
 
 # 7
 # Upacking Argument lists, using * for list and ** for dict
@@ -95,12 +91,10 @@ def parrot(voltage, state='a stiff', action='voom'):
 d = {"voltage": "four million", "state": "bleedin'demised", "action": "VOOM"}
 parrot(**d)
 
-
 # 8
 # Methods like ‘insert’, ‘remove’ or ‘sort’ that only modify the list have
 # no return value – they return the default ‘None’. This is a design principle
 # for all mutable data structures in Python.
-
 
 # 9
 # List Comprehension
@@ -113,14 +107,12 @@ for x in [1, 2, 3]:
         if x != y:
             combs.append((x, y))
 
-
 # 10
 # Loop over 2 list at the same time
 questions = ['name', 'quest', 'favorite color']
 answers = ['lancelot', 'the holy grail', 'blue']
 for q, a in zip(questions, answers):
     print('What is your {0}?  It is {1}.'.format(q, a))
-
 
 # 11
 # Understand Module
@@ -129,13 +121,11 @@ for q, a in zip(questions, answers):
 # module, the module’s name (as a string) is available as the value of the
 # global variable ‘__name__’.
 
-
 # Note: For efficiency reasons, each module is only imported once per
 # interpreter session.  Therefore, if you change your modules, you
 # must restart the interpreter – or, if it’s just one module you want
 # to test interactively, use importlib.reload(): e.g.
 # ‘import importlib; importlib.reload(modulename)’
-
 
 # When you run a Python module with
 
@@ -153,6 +143,12 @@ for q, a in zip(questions, answers):
 # module, because the code that parses the command line only runs if the
 # module is executed as the “main” file:
 
+# The built-in function *note dir(): d02. is used to find out which
+# names a module defines.  It returns a sorted list of strings:
+
+#      >>> import fibo, sys
+#      >>> dir(fibo)
+#      ['__name__', 'fib', 'fib2']
 
 # 12
 # Understand Package
@@ -202,7 +198,6 @@ for q, a in zip(questions, answers):
 # module or a package but can’t be a class or function or variable defined
 # in the previous item.
 
-
 # 9. Importing * From a Package
 # The *note import statement uses the following
 # convention: if a package’s ‘__init__.py’ code defines a list named
@@ -234,6 +229,7 @@ def scope_test():
     def do_global():
         global spam
         spam = "global spam"
+
     spam = "test spam"
     do_local()
     print("After local assignment:", spam)
@@ -245,7 +241,6 @@ def scope_test():
 
 scope_test()
 print("In global scope:", spam)
-
 
 # 14
 # Class
@@ -262,12 +257,14 @@ print("In global scope:", spam)
 # Class objects support two kinds of operations: attribute references and
 # instantiation. (instantiation via __init__ function)
 
+
 class MyClass:
     """A simple example class"""
     i = 12345
 
     def f(self):
         return 'hello world'
+
 
 # the special thing about methods is that the instance object is passed as
 # the first argument of the function. In our example, the call ‘x.f()’ is

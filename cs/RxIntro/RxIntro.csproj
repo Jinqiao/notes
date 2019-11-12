@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="System.Interactive" Version="4.0.0" />
     <PackageReference Include="System.Reactive" Version="4.2.0" />
   </ItemGroup>
 

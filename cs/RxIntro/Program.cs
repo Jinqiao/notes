@@ -11,7 +11,8 @@ namespace RxIntro
                    .WithParsed<Options>(o =>
                    {                       
                        Part part = (Part)System.Reflection.Assembly.GetExecutingAssembly().CreateInstance($"RxIntro.Part{o.Part}");                       
-                       part.Exec(o.Example).Wait();
+                       part.Exec(o.Example).Wait();                       
+                       System.Console.WriteLine("Main Thread Finished");
                    });
         }
     }

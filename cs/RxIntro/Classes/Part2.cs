@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -42,7 +43,7 @@ namespace RxIntro
         // The Create method is also preferred over creating custom types that implement the 
         // IObservable interface. There really is no need to implement the observer/observable 
         // interfaces yourself. Rx tackles the intricacies that you may not think of such as thread
-        //  safety of notifications and subscriptions.
+        // safety of notifications and subscriptions.
         public override void Example2()
         {
             var pub = Observable.Create<string>(
@@ -600,7 +601,7 @@ namespace RxIntro
             System.Console.WriteLine($"Source: {await source}");
         }
 
-        // Scan
+        // Scan (Aggregate output each step)
         public void Example35()
         {
             var numbers = new Subject<int>();
@@ -612,8 +613,8 @@ namespace RxIntro
             numbers.OnNext(3);
             numbers.OnCompleted();
 
-            //source.Aggregate(0, (acc, current) => acc + current);
-            //is equivalent to
+            // source.Aggregate(0, (acc, current) => acc + current);
+            // <==>
             // source.Scan(0, (acc, current) => acc + current).TakeLast();
         }
 
@@ -648,20 +649,154 @@ namespace RxIntro
             var source = Observable.Range(0, 10);
 
             // GroupBy returns -> nested observables
-            var group = source.GroupBy(i => i % 3); 
-            
+            var group = source.GroupBy(i => i % 3);
+
             // select returns an IObservable<IObservable<T>>
             group.Select(
                 grp => grp.Max().Select(value => new { grp.Key, value }))
             .Dump("Select");
 
             // selectMany return an IObservable<T>
-            // selectMany seems more useful!
             group.SelectMany(
                 grp => grp.Max().Select(value => new { grp.Key, value }))
             .Dump("SelectMany");
         }
-        //public void Example(){}
+
+
+        // **** Transformation of sequences ****
+
+        // Select        
+        public void Example38()
+        {
+            Observable.Range(0, 5)
+            .Select(i => i + 3)
+            .Dump("+3");
+
+            Observable.Range(1, 5)
+            .Select(i => (char)(i + 64))
+            .Dump("char");
+
+            Observable.Range(1, 5)
+            .Select(
+               i => new { Number = i, Character = (char)(i + 64) })
+            .Dump("anon");
+        }
+
+        // Cast and OfType
+        // source.Cast<int>() <==> source.Select(i=>(int)i)
+        // source.OfType<int>() <==> source.Where(i=>i is int).Select(i=>(int)i);
+        public void Example39()
+        {
+            var objects = new Subject<object>();
+            objects.Cast<int>().Dump("cast");
+            objects.OnNext(1);
+            objects.OnNext(2);
+            objects.OnNext(3);
+            // objects.OnNext("3");//Fail
+            objects.OnCompleted();
+        }
+
+        public void Example40()
+        {
+            var objects = new Subject<object>();
+            objects.OfType<int>().Dump("OfType");
+            objects.OnNext(1);
+            objects.OnNext(2);
+            objects.OnNext("3");//Ignored
+            objects.OnNext(4);
+            objects.OnCompleted();
+        }
+
+        // Timestamp and TimeInterval
+        public void Example41()
+        {
+            Observable.Interval(TimeSpan.FromSeconds(1))
+            .Take(3)
+            .Timestamp()
+            .Dump("TimeStamp");
+
+            Observable.Interval(TimeSpan.FromSeconds(1))
+            .Take(3)
+            .TimeInterval()
+            .Dump("TimeInterval");
+
+            Thread.Sleep(3100);
+        }
+
+        // Materialize and Dematerialize        
+        public void Example42()
+        {
+            // Materialize transitions a sequence into a metadata representation of the sequence
+            var range = Observable.Range(1, 3);
+            range.Materialize().Dump("Materialize");
+            range.Materialize().Dematerialize().Dump("Dematerialize");
+
+            // below will complete successfully
+            var source = new Subject<int>();
+            source.Materialize().Dump("Materialize");
+            source.OnNext(1);
+            source.OnNext(2);
+            source.OnNext(3);
+            source.OnError(new Exception("Fail?"));
+        }
+
+        // SelectMany (I think it as SelectCat or SelectConcat)
+        // From one, select zero or more, then concat (by time for Observable, by position for Enumerable)
+        public void Example43()
+        {
+            Observable.Range(1, 3)
+                .SelectMany(i => Observable.Range(1, i))
+                .Dump("SelectMany 1");
+
+            var query = from i in Observable.Range(1, 5)
+                        where i % 2 == 0
+                        from j in Observable.Range(1, i)
+                        select new { i, j }; // easy to access other variables in the scope of the query
+            query.Dump("SelectMany 2");
+        }
+
+        // IEnumerable<T> vs. IObservable<T> SelectMany
+        public void Example44()
+        {
+            IEnumerable<int> GetSubValues(int offset)
+            {
+                yield return offset * 10;
+                Thread.Sleep(1000);
+                yield return (offset * 10) + 1;
+                Thread.Sleep(1000);
+                yield return (offset * 10) + 2;
+            }
+
+            var enumerableSource = new[] { 1, 2, 3 };
+            var enumerableResult = enumerableSource.SelectMany(GetSubValues);
+            // Enumerable -> pulling one by one
+            foreach (var value in enumerableResult)
+            {
+                Console.WriteLine(value);
+            }
+        }
+
+        public void Example45()
+        {
+            IObservable<long> GetSubValues(long offset)
+            {
+                //Produce values [x*10, (x*10)+1, (x*10)+2] 4 seconds apart, but starting immediately
+                return Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(4))
+                    .Select(x => (offset * 10) + x)                    
+                    .Take(3);
+            }
+
+            // Values [1,2,3] 3 seconds apart.
+            Observable.Interval(TimeSpan.FromSeconds(3))
+                .Select(i => i + 1) //Values start at 0, so add 1.
+                .Take(3)            //We only want 3 values
+                .SelectMany(GetSubValues) //project into child sequences
+                .Timestamp()
+                .Dump("SelectMany");
+            
+            Thread.Sleep(17100);
+        }
+
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {

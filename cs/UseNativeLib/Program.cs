@@ -14,8 +14,11 @@ namespace UseNativeLib
 
             double a = double.Parse(args[0]);
             double b = double.Parse(args[1]);
+            Console.WriteLine($"a: {a}");
+            Console.WriteLine($"b: {b}");
             Console.WriteLine($"my_add: {MyAdd(a, b)}");
             Console.WriteLine($"my_minus: {MyMinus(a, b)}");
+            Console.WriteLine($"Finished");
         }
 
         // this will looks for libmylib.so on Linux

@@ -1,9 +1,25 @@
 1. First of all, C# cannot use static libraries
    https://stackoverflow.com/a/729579/4499942
 
-2. Use [DllImport("mylib")], this will look for libmylib.so on Linux
+2. Use [DllImport("mylib")], this will look for libmylib.so on Linux and mylib.dll on Windows
    Read https://www.mono-project.com/docs/advanced/pinvoke/ for more info
 
-3. Build the assembly, add the so file to search path.(see link above)
+3. Build the assembly, add the so/dll file to search path.(see link above)
 
 4. Run
+
+
+in this repo:
+
+1. create bin dir:
+$ dotnet run
+
+2. create shared lib
+on Windows:
+$ x86_64-w64-mingw32-gcc.exe -shared -o bin/Debug/netcoreapp3.0/mylib.dll -fPIC libSrc/mylib.c
+
+on Linux:
+$ gcc -shared -o bin/Debug/netcoreapp3.0/libmylib.so -fPIC libSrc/mylib.c
+
+3. Run the app
+$ dotnet run 1.2 2.8

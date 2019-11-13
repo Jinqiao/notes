@@ -778,6 +778,14 @@ namespace RxIntro
             Console.WriteLine("Press any key to unsubscribe.");
             Console.ReadKey();
             subscription.Dispose();
+            
+            Console.WriteLine("Press any key to subscribe again");
+            Console.ReadKey();
+            subscription = observable.Subscribe(i => Console.WriteLine("subscription : {0}", i));
+
+            Console.WriteLine("Press any key to unsubscribe again");
+            Console.ReadKey();
+            subscription.Dispose();
 
             Console.WriteLine("Press any key to dispose connection");
             Console.ReadKey();
@@ -805,6 +813,10 @@ namespace RxIntro
             Console.WriteLine("Press any key to unsubscribe.");
             Console.ReadKey();
             subscription.Dispose();
+
+            Console.WriteLine("Press any key to subscribe again");
+            Console.ReadKey();
+            subscription = observable.Subscribe(i => Console.WriteLine("subscription : {0}", i));
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();

@@ -436,7 +436,8 @@ namespace RxIntro
                     Console.WriteLine("--Starting new window");
                     window.Dump("Window" + windowIdx++);
                 },
-                () => {
+                () =>
+                {
                     Console.WriteLine("Completed");
                     completed = true;
                 }
@@ -453,22 +454,88 @@ namespace RxIntro
 
         // Join -> join sequences by intersecting windows
         // Params:
-        // this IObservable<TLeft> left
-        // IObservable<TRight> right 
-        // Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector 
-        // Func<TRight, IObservable<TRightDuration>> rightDurationSelector 
-        // Func<TLeft, TRight, TResult> resultSelector 
+        // this IObservable<TLeft> left -> open a window for each value
+        // IObservable<TRight> right -> open a window for each value
+        // Func<TLeft, IObservable<TLeftDuration>> leftDurationSelector -> when IObservable<TLeftDuration> emit or complete, the window opened by TLeft is closed
+        // Func<TRight, IObservable<TRightDuration>> rightDurationSelector -> when IObservable<TRightDuration> emit or complete, the window opened by TRight is closed
+        // Func<TLeft, TRight, TResult> resultSelector -> when left or right emits, pair all the open values and create a TResult 
+        public void Example18()
+        {
+            var leftOpenToCloseTime = new Dictionary<int, int>{
+                {100, 250}, {500, 700}, {800, 1200}
+            };
+            var rightOpenToCloseTime = new Dictionary<int, int>{
+                {200, 350}, {400, 450}, {600, 1000}
+            };
+            var left = leftOpenToCloseTime.Keys.ToObservable()
+                .SelectMany(v => Observable.Timer(TimeSpan.FromMilliseconds(v)).Select(w => v))
+                .Do(v => Console.WriteLine($"Left Publishing {v}"));
+            var right = rightOpenToCloseTime.Keys.ToObservable()
+                .SelectMany(v => Observable.Timer(TimeSpan.FromMilliseconds(v)).Select(w => v))
+                .Do(v => Console.WriteLine($"Right Publishing {v}"));
+            
+            left.Join(right, 
+                l => Observable.Timer(TimeSpan.FromMilliseconds(leftOpenToCloseTime[l] - l))
+                               .Do(v => Console.WriteLine($"Join 1 Close Left {l} @ {leftOpenToCloseTime[l]}")), 
+                r => Observable.Timer(TimeSpan.FromMilliseconds(rightOpenToCloseTime[r] - r))
+                               .Do(v => Console.WriteLine($"Join 1 Close Right {r} @ {rightOpenToCloseTime[r]}")), 
+                (l, r) => $"{l},{r}").Timestamp().Dump("Join 1");
 
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
-        //public void Example(){}
+            // right.Join(left, 
+            //     r => Observable.Timer(TimeSpan.FromMilliseconds(rightOpenToCloseTime[r] - r))
+            //                    .Do(v => Console.WriteLine($"Join 2 Close Right {r}")), 
+            //     l => Observable.Timer(TimeSpan.FromMilliseconds(leftOpenToCloseTime[l] - l))
+            //                    .Do(v => Console.WriteLine($"Join 2 Close Left {l}")), 
+            //     (l, r) => $"{l},{r}").Timestamp().Dump("Join 2");            
 
+            Thread.Sleep(3100);
+        }
+
+        // GroupJoin
+        // Similar to Join, but the second(right) parameter of resultSelect got a sequence 
+        // with all the open right values(even published before)        
+        public void Example19()
+        {
+            var leftOpenToCloseTime = new Dictionary<int, int>{
+                {100, 350}, {300, 1200}, {800, 1200}
+            };
+            var rightOpenToCloseTime = new Dictionary<int, int>{
+                {200, 250}, {400, 450}, {600, 950}
+            };
+
+            var left = leftOpenToCloseTime.Keys.ToObservable()
+                .SelectMany(v => Observable.Timer(TimeSpan.FromMilliseconds(v)).Select(w => v))
+                .Do(v => Console.WriteLine($"Left Publishing {v}"))
+                .Publish();
+            var right = rightOpenToCloseTime.Keys.ToObservable()
+                .SelectMany(v => Observable.Timer(TimeSpan.FromMilliseconds(v)).Select(w => v))
+                .Do(v => Console.WriteLine($"Right Publishing {v}"))
+                .Publish();
+            
+            left.Connect();
+            right.Connect();
+
+            left.GroupJoin(right, 
+                l => Observable.Timer(TimeSpan.FromMilliseconds(leftOpenToCloseTime[l] - l))
+                               .Do(v => Console.WriteLine($"Close Left {l} @ {leftOpenToCloseTime[l]}")), 
+                r => Observable.Timer(TimeSpan.FromMilliseconds(rightOpenToCloseTime[r] - r))
+                               .Do(v => Console.WriteLine($"Close Right {r} @ {rightOpenToCloseTime[r]}")), 
+                (l, r) => {
+                    r.Dump($"{l} group join with");
+                    return $"calling resultSelector, left={l} ";
+                }).Timestamp().Dump("GroupJoin");
+
+            // Compare with the join results below, the joined pairs are the same
+            // So if only need to join pairs, Join is enough and easier to reason about
+            // GroupJoin is more flexible 
+            left.Join(right, 
+                l => Observable.Timer(TimeSpan.FromMilliseconds(leftOpenToCloseTime[l] - l)), 
+                r => Observable.Timer(TimeSpan.FromMilliseconds(rightOpenToCloseTime[r] - r)), 
+                (l, r) => $"{l},{r}").Timestamp().Dump("Join");
+            
+            Thread.Sleep(2100);
+        }
+        
         private static int Tid()
         {
             return Thread.CurrentThread.ManagedThreadId;

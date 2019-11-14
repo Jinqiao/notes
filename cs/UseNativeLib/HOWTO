@@ -9,12 +9,12 @@
 4. Run
 
 
-in this repo:
+in this directory:
 
 1. create bin dir:
-$ dotnet run
+$ dotnet build
 
-2. create shared lib
+2. create shared lib (See repo-root/c/createAndUseLib/HOWTO for details)
 on Windows:
 $ x86_64-w64-mingw32-gcc.exe -shared -o bin/Debug/netcoreapp3.0/mylib.dll -fPIC libSrc/mylib.c
 

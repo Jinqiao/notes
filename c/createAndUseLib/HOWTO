@@ -21,7 +21,7 @@
    $ gcc -o bin/shared/libmylib.so -shared bin/shared/*.o
 
 5. Create an executable file, link all together
-   -L path to look for libraries
+   -L path to look for libraries(or use LIBRARY_PATH env variable, see: https://stackoverflow.com/a/13292386/)
    -l library to link, without lib prefix and .a suffix
    NOTE: libraries need to be specified after the files needing them
          otherwise a "undefined reference to xxx" will throw

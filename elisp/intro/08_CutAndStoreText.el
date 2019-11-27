@@ -34,3 +34,42 @@
 
 
 ;; 8.4 Digression into C
+
+
+;; 8.5 Initializing a Variable with ‘defvar’
+;; It is unlike ‘setq’ in two ways:
+;; First, it only sets the value of the variable if the variable does
+;; not already have a value.  Second, ‘defvar’ has a documentation
+;; string.
+
+;; Seeing the Current Value of a Variable -> 'C-h v'
+
+
+;; 8.7 Searching Exercises
+;; • Write an interactive function that searches for a string.  If the
+;; search finds the string, leave point after it and display a message
+;; that says “Found!”.  (Do not use ‘search-forward’ for the name of
+;; this function; if you do, you will overwrite the existing version
+;; of ‘search-forward’ that comes with Emacs.  Use a name such as
+;; ‘test-search’ instead.)
+(defun test-search (text)
+  "ex 8.7.1"
+  (interactive "MSearch Text: ")
+  (let ((p1 (point)))
+    (search-forward text)
+    (unless (= p1 (point))
+      (message "Found!"))))
+
+
+;; • Write a function that prints the third element of the kill ring in
+;; the echo area, if any; if the kill ring does not contain a third
+;; element, print an appropriate message.
+(defun third-of-kill-ring ()
+  "get the third of kill-ring"
+  (interactive)
+  (setq third (nth 3 kill-ring))
+  (if third
+      (message "the third element of kill-ring is %s" third)
+    (message "kill ring is too short")))
+
+(third-of-kill-ring)

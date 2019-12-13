@@ -1,0 +1,50 @@
+* 3 Stages, IDENTIFY, ESTIMATE and FORECAST
+
+* IDENTIFY
+** Input:
+   - specify differencing orders in VAR=
+     + d=2 -> VAR=Y(1,1)
+     + VAR=Y(2) will creates a 2-span difference-that is, current period Y minus Y
+       from two periods ago
+   - use ESACF, MINIC and SCAN to select p,q values
+   - CROSSCORR, the crosscorr series can be used as a input var in
+     later ESTIMATE statement
+** Output:
+   - Corr Plots
+     1. ACF :: autocorrelation function
+               decay slowly -> non-stationary
+               cut sharply at q for pure MA model 
+     2. PACF :: autocorr after remove the previous orders' corr
+                cut sharply at p, for pure AR model
+     3. IACF :: ACF of the model exchange phi and theta
+                also cuts sharply for pure AR model
+                decaly slowly -> over-differencing
+   - Autocorrelation Check for White Noise
+     H0 :: all corr(h) == 0 up to some lag
+      
+* ESITMATE
+** Input:
+  - specify p, q orders
+    + without parenthesis, like p=5, means 1 to 5, <==> p=(1,2,3,4,5)
+    + with parenthesis, we can specify the phi and theta ploynomial whatever we like
+    + it is more flexible than the general (p,d,q)*(P,D,Q)s notition
+  - specify INPUT variables and transfer functions
+    + use PLOT option to show identifying plots for residule series(to select p,d,q)
+    + use cross-correlation functions to identify transfer function models(see prewhitening in detail)
+  - OUTLIER statement is considered a part of this stage
+** Output:
+  - Parameter Estimates(can use different methods to estimate)
+  - Goodness-of-Fit Statistics: The "Variance Estimate" is the variance of the residual
+    series, which estimates the innovation variance. The item labeled "Std Error Estimate"
+    is the square root of the variance estimate
+  - Correlations of Parameter Estimates: If two parameter estimates are very highly
+    correlated, you might consider dropping one of them from the model
+  - Autocorrelation check for White Noise :: same as IDENTIFY but for residuals
+  - Listing the esimated model using backshift notation
+
+* FORECAST
+** Input:
+  - specify INTERVAL=, LEAD= and OUT=
+  - the BACK= option might be useful for back testing
+** Output:
+  - it also gives confident limits, which might be useful 

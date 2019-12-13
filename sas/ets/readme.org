@@ -1,0 +1,19 @@
+* Procedures to study:
+  PROC ARIMA
+  PROC VARMAX
+  PROC PANEL, TSCSREG(no longer being updated)
+  PROC AUTOREG (PROC ARIMA can perform 'Regression with ARMA Errors', so this is covered by ARIMA, how about ARCH, GARCH?)
+  PROC PDLREG (PROC ARIMA can specify transfer function, so this is covered by ARIMA?)
+  PROC STATESPACE
+  PROC SPECTRA
+  PROC UCM(structural time series models, unobserved components models)
+  PROC X11, X12
+  PROC ESM
+  PROC COMPUTAB
+  
+  DATA PREP: PROC EXPAND, TIMESERIES, 
+  DATA SOURCEs: SASECRSP, SASEFAME, SASEHAVR, SASEXCCM, etc.
+  SIMULTANEOUS EQUATIONS: PROC SYSLIN, ENTROPY, SIMLIN, MODEL
+  
+  
+  

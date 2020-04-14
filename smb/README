@@ -1,4 +1,9 @@
-Reference: https://wiki.centos.org/TipsAndTricks/WindowsShares
+To config smb server, see this one
+https://linuxconfig.org/install-samba-on-redhat-8
+
+
+To mount smb share, see below
+https://wiki.centos.org/TipsAndTricks/WindowsShares
 
 1. Required packages:
 $ yum install samba-client samba-common cifs-utils autofs

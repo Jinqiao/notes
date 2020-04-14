@@ -1,29 +1,32 @@
-To config smb server, see this one
-https://linuxconfig.org/install-samba-on-redhat-8
+* To config smb server, see this one
+  https://linuxconfig.org/install-samba-on-redhat-8
 
+  !!! Need to disable SELinux to make non-guest access work !!!
+  or see the following page to config SELinux to allow samba
+  https://wiki.centos.org/zh/HowTos/SetUpSamba
 
-To mount smb share, see below
-https://wiki.centos.org/TipsAndTricks/WindowsShares
+* To mount smb share, see below
+  https://wiki.centos.org/TipsAndTricks/WindowsShares
 
-1. Required packages:
-$ yum install samba-client samba-common cifs-utils autofs
+  1. Required packages:
+  $ yum install samba-client samba-common cifs-utils autofs
 
-2. Create a secret file in /root/ to save windows username and password
+  2. Create a secret file in /root/ to save windows username and password
 
-3. In /etc/auto.master add a line like below:
+  3. In /etc/auto.master add a line like below:
 
-# mount-point   map-file
-/mnt/auto       /etc/auto.mymount
+  # mount-point   map-file
+  /mnt/auto       /etc/auto.mymount
 
-4. In the map file, /etc/auto.mymount, put lines like below:
+  4. In the map file, /etc/auto.mymount, put lines like below:
 
-# This is an automounter map and it has the following format
-# key [ -mount-options-separated-by-comma ] location
-# Details may be found in the autofs(5) manpage
-pc1-d   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/d
-pc1-e   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/e
-pc1-f   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/f
+  # This is an automounter map and it has the following format
+  # key [ -mount-options-separated-by-comma ] location
+  # Details may be found in the autofs(5) manpage
+  pc1-d   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/d
+  pc1-e   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/e
+  pc1-f   -fstype=cifs,user,uid=1000,gid=1000,rw,suid,credentials=/root/pc-pw.txt ://pc1/f
 
-5. run /sbin/service autofs restart as root
+  5. run /sbin/service autofs restart as root
 
-6. access remote dirve by /mnt/auto/pc1-d
+  6. access remote dirve by /mnt/auto/pc1-d

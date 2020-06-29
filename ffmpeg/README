@@ -1,0 +1,13 @@
+* the man page is very good, it has several books, 
+  "ffmpeg, ffmpeg-codecs, ffmpeg-filters" are very useful. 
+  Also the html version has a nicer format and easier to read.
+  read the first few sections in "woman ffmpeg" to refresh memory
+* example command:
+  time ffmpeg -y -fflags +genpts -probesize 2G -analyzeduration 100M
+  -loglevel warning -vsync 0 -hwaccel cuda 
+  -c:v h264_cuvid -i input_file.mkv
+  -c:v h264_nvenc -c:a aac -filter_complex "[0:v][0:3] overlay=y=(H-h)/2" -hls_segment_type fmp4 -hls_time 10 -hls_list_size 0 output.m3u8
+  
+  the GPU options are from https://developer.nvidia.com/blog/nvidia-ffmpeg-transcoding-guide/
+  --fflags +genpts is from https://superuser.com/a/710087/692705
+  for the filter, as we have 2 inputs here, we have to use -filter_complex, here the overlayed frame is larger (h>H), we set y=(H-h)/2 to make them center aligned

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,14 +29,16 @@ namespace RxIntro
             var subject = new Subject<object>();
             subject.Subscribe(
                 o => Console.WriteLine($"Received {o} on threadId:{Tid()}"));
-            ParameterizedThreadStart notify = obj =>
+
+            void Notify(object? obj)
             {
                 Console.WriteLine($"OnNext({obj}) on threadId:{Tid()}");
-                subject.OnNext(obj);
-            };
-            notify(1);
-            new Thread(notify).Start(2);
-            new Thread(notify).Start(3);
+                if (obj != null) subject.OnNext(obj);
+            }
+
+            Notify(1);
+            new Thread(Notify).Start(2);
+            new Thread(Notify).Start(3);
         }
 
         // SubscribeOn and ObserveOn
